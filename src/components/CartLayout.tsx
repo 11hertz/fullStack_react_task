@@ -1,6 +1,6 @@
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { useSession } from '../hooks/session-context';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 const CartLayout = () => {
@@ -15,10 +15,13 @@ const CartLayout = () => {
 
   const searchStr = searchParams.get('searchStr') || '';
 
+  useEffect(() => {
+    setSelectedItem(cart[0]);
+  }, [cart]);
+
   return (
     <div className='CartLayoutWrap'>
       <div className='CartLayout'>
-        <h1>CartLayout</h1>
         Search :{' '}
         <input
           type='text'
@@ -44,8 +47,7 @@ const CartLayout = () => {
                 {item.price.toLocaleString()}
                 <button onClick={() => removeCartItem(item.id)}>X</button>
               </li>
-            ))
-            .reverse()}
+            ))}
         </ul>
         <button
           onClick={() => setSelectedItem({ id: 0, name: '', price: 1000 })}

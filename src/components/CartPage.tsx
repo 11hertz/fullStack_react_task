@@ -12,17 +12,29 @@ const Cart = () => {
   const save = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (nameRef.current && priceRef.current) {
+      if (nameRef.current.value === '' && priceRef.current.value === '') {
+        alert('상품명과 금액을 정확히 입력하세요');
+        return false;
+      } else if (nameRef.current.value === '') {
+        alert('상품명을 정확히 입력하세요');
+        return false;
+      } else if (priceRef.current.value === '') {
+        alert('금액을 정확히 입력하세요');
+        return false;
+      }
       saveCartItem(
         item.id || 0,
         nameRef.current?.value,
         +priceRef.current?.value
       );
+      nameRef.current.value = '';
+      priceRef.current.value = '';
+      nameRef.current.focus();
     }
   };
 
   return (
     <div className='CartPage'>
-      <h2>Cart</h2>
       {item?.id === 0 ? (
         <form onSubmit={save}>
           <input type='text' ref={nameRef} placeholder='Input name'></input>

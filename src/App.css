@@ -13,6 +13,9 @@ nav ul {
   list-style: none;
   display: flex;
   justify-content: space-evenly;
+  color: black;
+  font-weight: 900;
+  font-size: 1.5rem;
 }
 
 .CartLayoutWrap {
@@ -24,6 +27,7 @@ nav ul {
 
 .CartLayout,
 .CartPage {
+  padding-top: 2rem;
   border: 2px solid black;
 }
 
@@ -37,4 +41,10 @@ nav ul {
 
 .activeList {
   border: 2px solid green;
+}
+
+.deleteItem {
+  color: red;
+  background-color: white;
+  font-weight: 900;
 }
