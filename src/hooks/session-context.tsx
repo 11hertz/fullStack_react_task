@@ -59,7 +59,7 @@ export const SessionContextProvider = ({ children }: PropsWithChildren) => {
       cart.push({ id, name, price });
     }
 
-    setSession({ ...session, cart });
+    setSession({ ...session, cart: [...cart] });
     return id;
   };
 

@@ -18,7 +18,7 @@ const CartLayout = () => {
   const itemId = searchParams.get('itemId') || '';
 
   useEffect(() => {
-    const sortedItem = cart.sort((a, b) => a.id - b.id);
+    const sortedItem = cart.sort((a, b) => b.id - a.id);
     if (searchStr) {
       setItems(sortedItem.filter((item) => item.name.includes(searchStr)));
     } else {
