@@ -11,23 +11,38 @@ const CartLayout = () => {
   } = useSession();
 
   const [selectedItem, setSelectedItem] = useState<Cart | null>(null);
-  const [searchParams, setSearchParmas] = useSearchParams({ searchStr: '' });
+  const [searchParams, setSearchParams] = useSearchParams({ searchStr: '' });
+  const [items, setItems] = useState<Cart[]>([]);
 
   const searchStr = searchParams.get('searchStr') || '';
+  const itemId = searchParams.get('itemId') || '';
 
   useEffect(() => {
-    setSelectedItem(cart[0]);
-  }, [cart]);
+    const sortedItem = cart.sort((a, b) => a.id - b.id);
+    if (searchStr) {
+      setItems(sortedItem.filter((item) => item.name.includes(searchStr)));
+    } else {
+      setItems(sortedItem);
+    }
+  }, [cart, searchStr]);
+
+  useEffect(() => {
+    if (itemId) {
+      setSelectedItem(cart.find((item) => item.id === Number(itemId)) || null);
+    } else {
+      setSelectedItem(items[0]);
+    }
+  }, [cart, items, itemId]);
 
   return (
     <div className='CartLayoutWrap'>
       <div className='CartLayout'>
-        Search :{' '}
+        Search :
         <input
           type='text'
           value={searchParams.get('searchStr') || ''}
           onChange={(e) =>
-            setSearchParmas({ searchStr: e.currentTarget.value })
+            setSearchParams({ searchStr: e.currentTarget.value, itemId })
           }
         />
         <ul>
@@ -40,12 +55,22 @@ const CartLayout = () => {
                 })}
                 key={item.id}
               >
-                {item.id}{' '}
-                <button onClick={() => setSelectedItem(item)}>
-                  {item.name}
-                </button>{' '}
-                {item.price.toLocaleString()}
-                <button onClick={() => removeCartItem(item.id)}>X</button>
+                <small>{item.id}</small>
+                <button
+                  onClick={() => {
+                    setSelectedItem(item);
+                    setSearchParams({ searchStr, itemId: String(item.id) });
+                  }}
+                >
+                  <strong>{item.name}</strong>
+                </button>
+                <small>{item.price.toLocaleString()}</small>
+                <button
+                  className='deleteItem '
+                  onClick={() => removeCartItem(item.id)}
+                >
+                  X
+                </button>
               </li>
             ))}
         </ul>

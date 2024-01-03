@@ -50,9 +50,17 @@ export const SessionContextProvider = ({ children }: PropsWithChildren) => {
 
   const saveCartItem = (id: number, name: string, price: number) => {
     const { cart } = session;
-    id = Math.max(...session.cart.map((cart) => cart.id), 0) + 1;
-    cart.push({ id, name, price });
+    const item = id && cart.find((item) => item.id === id);
+    if (item) {
+      item.name = name;
+      item.price = price;
+    } else {
+      id = Math.max(...session.cart.map((cart) => cart.id), 0) + 1;
+      cart.push({ id, name, price });
+    }
+
     setSession({ ...session, cart });
+    return id;
   };
 
   const removeCartItem = (itemId: number) => {
